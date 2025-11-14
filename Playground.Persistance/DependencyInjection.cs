@@ -15,6 +15,9 @@ public static class DependencyInjection
         services.AddDbContext<PlaygroundDbContext>(options =>
             options.UseNpgsql(connectionString));
 
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IUserRepository, UserRepository>();
+
         return services;
     }
 }
