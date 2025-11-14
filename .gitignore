@@ -1,0 +1,86 @@
+# Visual Studio / Rider / IDEs
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+*.dotCover
+
+# Build results
+bin/
+obj/
+out/
+artifacts/
+
+# Rider caches
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# Except build/package restore files
+!**/packages/build/
+!**/packages/repositories.config
+
+# ASP.NET Core / Web projects
+wwwroot/lib/
+
+# Publish output
+*.Publish.xml
+publish/
+
+# Logs
+*.log
+logs/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Coverage & test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.opencover
+
+# Entity Framework
+*.dbmdl
+*.bak
+*.mdf
+*.ldf
+
+# User-specific files
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.svclog
+
+# Dotnet CLI
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.dotnet/
+.nuget/
+.nuget/packages/
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.iml
+
+# Clean Architecture specific (optional)
+# Sometimes, people generate code, migrations, or configs
+# **/Migrations/
+# **/*.Generated.cs
+# **/*.Designer.cs
