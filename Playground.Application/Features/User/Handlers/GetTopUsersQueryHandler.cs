@@ -1,12 +1,13 @@
 using MediatR;
 using Playground.Application.Features.User.Queries;
-using Playground.Domain.DTOs;
+using Playground.Domain.Common;
 using Playground.Domain.Interfaces;
+using Playground.Domain.Responses;
 using System.Linq;
 
 namespace Playground.Application.Features.User.Handlers;
 
-public class GetTopUsersQueryHandler : IRequestHandler<GetTopUsersQuery, List<GetTopFiveUsersDto>>
+public class GetTopUsersQueryHandler : IRequestHandler<GetTopUsersQuery, BaseResponse<List<GetTopFiveUsersResponse>>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -15,11 +16,11 @@ public class GetTopUsersQueryHandler : IRequestHandler<GetTopUsersQuery, List<Ge
         _userRepository = userRepository;
     }
 
-    public async Task<List<GetTopFiveUsersDto>> Handle(GetTopUsersQuery request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<List<GetTopFiveUsersResponse>>> Handle(GetTopUsersQuery request, CancellationToken cancellationToken)
     {
         var topUsers = await _userRepository.GetTopUsersAsync(5);
 
-        return topUsers.Select(user => new GetTopFiveUsersDto
+        return BaseResponse<List<GetTopFiveUsersResponse>>.Ok(topUsers.Select(user => new GetTopFiveUsersResponse
         (
             UserId: user.Id,
             UserName: user.Username,
@@ -27,12 +28,12 @@ public class GetTopUsersQueryHandler : IRequestHandler<GetTopUsersQuery, List<Ge
             TopPostsWithLikes: user.Posts
                 .OrderByDescending(post => post.Likes.Count)
                 .Take(5)
-                .Select(post => new GetPostsWithLikesDto
+                .Select(post => new GetPostsWithLikesResponse
                 (
                     PostId: post.Id,
                     LikesCount: post.Likes.Count
                 ))
                 .ToArray()
-        )).ToList();
+        )).ToList());
     }
 }

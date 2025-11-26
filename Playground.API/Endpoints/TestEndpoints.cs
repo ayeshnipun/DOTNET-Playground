@@ -1,4 +1,5 @@
 using MediatR;
+using Playground.Application.Features.User.Queries;
 
 namespace Playground.API.Endpoints;
 
@@ -8,9 +9,8 @@ public static class TestEndpoints
     {
         app.MapGet("/api/users", async (IMediator mediator) =>
         {
-            return Results.Ok();
-            // var result = await mediator.Send(new GetAdtTokenQuery());
-            // return result.Success ? Results.Ok(result.Data) : Results.BadRequest(result.Message);
+            var result = await mediator.Send(new GetTopUsersQuery());
+            return result.Success ? Results.Ok(result.Data) : Results.BadRequest(result.Message);
         });
     }
 }

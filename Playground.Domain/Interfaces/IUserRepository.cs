@@ -1,5 +1,4 @@
 using Playground.Domain.Entities;
-using Playground.Domain.Interfaces;
 
 namespace Playground.Domain.Interfaces;
 
