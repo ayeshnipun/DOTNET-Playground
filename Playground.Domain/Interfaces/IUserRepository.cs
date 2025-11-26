@@ -5,5 +5,5 @@ namespace Playground.Domain.Interfaces;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    Task<User?> GetUserWithPostsAsync(int userId);
+    Task<List<User>> GetTopUsersAsync(int userId);
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Playground.Domain.Entities;
+using Playground.Domain.Interfaces;
 using Playground.Persistance;
 
 public class UserRepository : GenericRepository<User>, IUserRepository
@@ -9,11 +10,8 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetUserWithPostsAsync(int userId)
+    public Task<List<User>> GetTopUsersAsync(int userId)
     {
-        return await _dbSet
-            .Include(u => u.Posts)
-            .Include(u => u.Comments)
-            .FirstOrDefaultAsync(u => u.Id == userId);
+        return Task.FromResult(new List<User>());
     }
 }
