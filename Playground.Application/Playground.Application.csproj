@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Playground.Domain\Playground.Domain.csproj" />
+    <ProjectReference Include="..\Playground.Persistance\Playground.Persistance.csproj" />
   </ItemGroup>
 
 </Project>
