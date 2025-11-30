@@ -56,154 +56,229 @@ public class GetTopUsersQueryHandler : IRequestHandler<GetTopUsersQuery, BaseRes
         //     .ToListAsync(cancellationToken);
 
 
+        // // Fetch all posts in a category
+        // var postsInReactCategory = _dbContext.Posts
+        //     .Where(p => p.CategoryId == 1).ToListAsync(); // Assuming that React category is 1
+
+        // // Get usernames of all users who have posted at least once
+        // var userNames = _dbContext.Users.Where(u => u.Posts.Any()).Select(u => u.Username).ToListAsync();
+
+
+        // // Get comments created in the last 7 days
+        // var commentsCreatedInLastSevenDays = _dbContext.Comments.Where(c => c.CreatedAt >= sevenDaysAgo).ToList();
+
+        // // 2.Sorting & Pagination
+
+        // // Top 5 latest posts
+        // var topFiveLatestPosts = _dbContext.Posts.OrderByDescending(p => p.Id).Take(5).ToList();
+
+        // // Paginate comments for a post
+        // var paginatedCommentsForAPost = _dbContext.Comments
+        //     .Where(c => c.PostId == 1)
+        //     .OrderByDescending(c => c.CreatedAt)
+        //     .Skip(10)
+        //     .Take(5)
+        //     .ToList();
+
+        // // 3.Aggregates
+        // // Count of comments per post
+        // var countOfCommentsPerPost = _dbContext.Posts
+        //     .Include(p => p.Comments)
+        //     .GroupBy(p => p.Id)
+        //     .Select(g => new
+        //     {
+        //         PostId = g.Key,
+        //         CommentCount = g.First().Comments.Count
+        //     })
+        //     .ToList();
+
+        // var commentCount = _dbContext.Comments
+        //     .GroupBy(c => c.PostId)
+        //     .Select(g => new
+        //     {
+        //         PostId = g.Key,
+        //         Count = g.Count()
+        //     }).ToList();
+
+        // // likes per post (more than 0 likes)
+        // var likesPerPost = _dbContext.Likes
+        //     .GroupBy(l => l.PostId)
+        //     .Select(g => new
+        //     {
+        //         PostId = g.Key,
+        //         LikesCount = g.Count()
+        //     }).ToList();
+
+        // // likes per post including 0 likes
+        // var likesPerPostWithZero = _dbContext.Posts
+        //     .Select(g => new
+        //     {
+        //         PostId = g.Id,
+        //         LikeCount = g.Likes.Count()
+        //     })
+        //     .ToList();
+
+        // // User with most comments
+        // var userWithMostComments = _dbContext.Users.OrderByDescending(u => u.Comments.Count).First();
+
+        // // 4.Complex Queries(Joins, Nested, Multiple Levels)
+
+        // // Posts with comments and the usernames who commented
+        // var postsWithCommentsAndUserNames = _dbContext.Posts
+        //     .Where(p => p.Comments.Any())
+        //     .Include(p => p.Comments)
+        //         .ThenInclude(c => c.User)
+        //     .Select(s => new
+        //     {
+        //         PostId = s.Id,
+        //         Usernames = s.Comments.Select(c => c.User.Username).ToList()
+        //     })
+        //     .ToList();
+
+
+        // // Top 3 posts with most likes along with author
+        // var topThreePostsWithMostLikes = _dbContext.Posts
+        //     .Include(p => p.User)
+        //     .OrderByDescending(p => p.Likes.Count)
+        //     .Take(3)
+        //     .Select(s => new
+        //     {
+        //         PostId = s.Id,
+        //         Author = s.User.Username
+        //     })
+        //     .ToList();
+
+
+        // // Users and the posts they commented on (distinct posts only)
+        // var usersAndPostsTheyCommented = _dbContext.Users.Select(u => new
+        // {
+        //     u.Username,
+        //     Posts = u.Comments.Select(c => c.PostId).Distinct().ToList()
+        // }).ToList();
+
+        // // 5.Multi - level Aggregates & Grouping
+
+        // // Top 5 users with most comments, including their top 3 posts by likes
+        // var topFiveUsersWithMostComments = _dbContext.Users
+        //     .OrderByDescending(u => u.Comments.Count)
+        //     .Take(5)
+        //     .Select(u => new
+        //     {
+        //         UserId = u.Id,
+        //         u.Username,
+        //         CommentCount = u.Comments.Count,
+        //         TopThreePostsByLikes = u.Posts
+        //             .OrderByDescending(p => p.Likes.Count)
+        //             .Take(3)
+        //             .Select(p => new
+        //             {
+        //                 PostId = p.Id,
+        //                 p.Content,
+        //                 LikesCount = p.Likes.Count
+        //             }).ToList()
+        //     })
+        //     .ToList();
+
+
+        // // Most popular category (by total likes of posts)
+        // var mostPopularCategory = _dbContext.Posts
+        //     .Include(p => p.Category)
+        //     .OrderByDescending(p => p.Likes.Count)
+        //     .Take(1)
+        //     .Select(p => new
+        //     {
+        //         Category = p.CategoryId
+        //     });
+
+        // var popularCategory = _dbContext.Categories
+        //     .Select(c => new
+        //     {
+        //         Category = c.Id,
+        //         TotalLikes = c.Posts.Sum(p => p.Likes.Count)
+        //     })
+        //     .OrderByDescending(x => x.TotalLikes)
+        //     .FirstOrDefault();
+
+        // // Posts with no comments
+        // var postsWithNoComments = _dbContext.Posts
+        //     .Where(p => !p.Comments.Any())
+        //     .ToList();
+
+
         // Fetch all posts in a category
-        var postsInReactCategory = _dbContext.Posts
-            .Where(p => p.CategoryId == 1).ToListAsync(); // Assuming that React category is 1
+        var postsInAGivenCategory = _dbContext.Posts.Where(p => p.CategoryId == 1).ToList();
 
         // Get usernames of all users who have posted at least once
-        var userNames = _dbContext.Users.Where(u => u.Posts.Any()).Select(u => u.Username).ToListAsync();
+        var usernames = _dbContext.Users.Where(u => u.Posts.Any()).Select(u => u.Username).ToList();
 
         // Get comments created in the last 7 days
-        var commentsCreatedInLastSevenDays = _dbContext.Comments.Where(c => c.CreatedAt >= sevenDaysAgo).ToList();
+        var since = DateTime.UtcNow.AddDays(-7);
 
-        // 2.Sorting & Pagination
+        var commentsCreatedInLastSevenDays = _dbContext.Comments.Where(c => c.CreatedAt >= since).ToList();
+
         // Top 5 latest posts
         var topFiveLatestPosts = _dbContext.Posts.OrderByDescending(p => p.Id).Take(5).ToList();
 
-        // Paginate comments for a post
-        var paginatedCommentsForAPost = _dbContext.Comments
-            .Where(c => c.PostId == 1)
-            .OrderByDescending(c => c.CreatedAt)
-            .Skip(10)
-            .Take(5)
+        // Paginate comments for a single post
+        var pageNumber = 0;
+        var size = 10;
+        var postId = 10;
+
+        var paginatedCommentsForPost = _dbContext.Comments
+            .Where(c => c.PostId == postId)
+            .Skip(pageNumber * size)
+            .Take(size)
             .ToList();
 
-        // 3.Aggregates
         // Count of comments per post
         var countOfCommentsPerPost = _dbContext.Posts
-            .Include(p => p.Comments)
-            .GroupBy(p => p.Id)
-            .Select(g => new
-            {
-                PostId = g.Key,
-                CommentCount = g.First().Comments.Count
-            })
-            .ToList();
-
-        var commentCount = _dbContext.Comments
-            .GroupBy(c => c.PostId)
-            .Select(g => new
-            {
-                PostId = g.Key,
-                Count = g.Count()
-            }).ToList();
-
-        // likes per post (more than 0 likes)
-        var likesPerPost = _dbContext.Likes
-            .GroupBy(l => l.PostId)
-            .Select(g => new
-            {
-                PostId = g.Key,
-                LikesCount = g.Count()
-            }).ToList();
-
-        // likes per post including 0 likes
-        var likesPerPostWithZero = _dbContext.Posts
-            .Select(g => new
-            {
-                PostId = g.Id,
-                LikeCount = g.Likes.Count()
-            })
-            .ToList();
-
-        // User with most comments
-        var userWithMostComments = _dbContext.Users.OrderByDescending(u => u.Comments.Count).First();
-
-        // 4.Complex Queries(Joins, Nested, Multiple Levels)
-
-        // Posts with comments and the usernames who commented
-        var postsWithCommentsAndUserNames = _dbContext.Posts
-            .Where(p => p.Comments.Any())
-            .Include(p => p.Comments)
-                .ThenInclude(c => c.User)
             .Select(s => new
             {
                 PostId = s.Id,
-                Usernames = s.Comments.Select(c => c.User.Username).ToList()
+                CommentCount = s.Comments.Count()
+            })
+            .ToList();
+
+        // likes per post (more than 0 likes)
+        var likesPerPost = _dbContext.Posts
+            .Select(s => new
+            {
+                PostId = s.Id,
+                LikesCount = s.Likes.Count()
+            })
+            .Where(x => x.LikesCount > 0)
+            .ToList();
+
+        // likes per post including 0 likes
+        var likesPerPostsIncludingZeroLikes = _dbContext.Posts.Select(p => new
+        {
+            postId = p.Id,
+            LikesCount = p.Likes.Count()
+        }).ToList();
+
+        // User with most comments
+        var userWithTheMostComments = _dbContext.Users.OrderByDescending(u => u.Comments.Count()).FirstOrDefault();
+
+        // Posts with comments and the usernames who commented
+        var postsWithComments = _dbContext.Posts
+            .Where(p => p.Comments.Any())
+            .Select(s => new
+            {
+                PostId = s.Id,
+                CommendWithNames = s.Comments.Select(cm => new
+                {
+                    Content = cm.Text,
+                    CommentedBy = cm.User.Username
+                })
             })
             .ToList();
 
         // Top 3 posts with most likes along with author
-        var topThreePostsWithMostLikes = _dbContext.Posts
-            .Include(p => p.User)
-            .OrderByDescending(p => p.Likes.Count)
-            .Take(3)
-            .Select(s => new
-            {
-                PostId = s.Id,
-                Author = s.User.Username
-            })
-            .ToList();
-
         // Users and the posts they commented on (distinct posts only)
-        var usersAndPostsTheyCommented = _dbContext.Users.Select(u => new
-        {
-            u.Username,
-            Posts = u.Comments.Select(c => c.PostId).Distinct().ToList()
-        }).ToList();
-
-        // 5.Multi - level Aggregates & Grouping
-
         // Top 5 users with most comments, including their top 3 posts by likes
-        var topFiveUsersWithMostComments = _dbContext.Users
-            .OrderByDescending(u => u.Comments.Count)
-            .Take(5)
-            .Select(u => new
-            {
-                UserId = u.Id,
-                u.Username,
-                CommentCount = u.Comments.Count,
-                TopThreePostsByLikes = u.Posts
-                    .OrderByDescending(p => p.Likes.Count)
-                    .Take(3)
-                    .Select(p => new
-                    {
-                        PostId = p.Id,
-                        p.Content,
-                        LikesCount = p.Likes.Count
-                    }).ToList()
-            })
-            .ToList();
-
         // Most popular category (by total likes of posts)
-        var mostPopularCategory = _dbContext.Posts
-            .Include(p => p.Category)
-            .OrderByDescending(p => p.Likes.Count)
-            .Take(1)
-            .Select(p => new
-            {
-                Category = p.CategoryId
-            });
-
-        var popularCategory = _dbContext.Categories
-            .Select(c => new
-            {
-                Category = c.Id,
-                TotalLikes = c.Posts.Sum(p => p.Likes.Count)
-            })
-            .OrderByDescending(x => x.TotalLikes)
-            .FirstOrDefault();
-
         // Posts with no comments
-        var postsWithNoComments = _dbContext.Posts
-            .Where(p => !p.Comments.Any())
-            .ToList();
 
         return BaseResponse<List<GetTopFiveUsersResponse>>.Ok(new List<GetTopFiveUsersResponse>());
     }
 }
-
-// Most popular category(by total likes of posts)
-// Posts with no comments
-// Users who liked their own posts
-// Daily comment activity over the last month

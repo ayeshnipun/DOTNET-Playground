@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Playground.Application.Interfaces;
 
 namespace Playground.Application;
 
