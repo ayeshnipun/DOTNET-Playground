@@ -25,11 +25,9 @@ public class NotificationService : INotificationService
     {
         var reader = _channel.Reader;
 
-        while (!ct.IsCancellationRequested)
+        while (await reader.WaitToReadAsync(ct))
         {
-            // Wait for the next event
-            // ServerSentEvent sse;
-            if (reader.TryRead(out var sse))
+            while (reader.TryRead(out var sse))
             {
                 Console.WriteLine("--------Got SSE event");
                 yield return sse;

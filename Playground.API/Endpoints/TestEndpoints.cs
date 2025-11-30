@@ -22,9 +22,9 @@ public static class TestEndpoints
         app.MapGet("/api/orders", (INotificationService service, CancellationToken ct) =>
         {
             return TypedResults.ServerSentEvents(
-        service.ReadEvents(ct),
-        eventType: "order"
-    );
+                service.ReadEvents(ct),
+                eventType: "order"
+            );
         });
 
         app.MapPost("/api/orders/create", async (

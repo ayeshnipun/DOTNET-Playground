@@ -11,7 +11,7 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddScoped<IOrderService, OrderService>();
-        services.AddScoped<INotificationService, NotificationService>();
+        services.AddSingleton<INotificationService, NotificationService>();
 
         return services;
     }
