@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using MediatR;
+using Playground.Application.Features.Currency.Queries;
 using Playground.Application.Features.User.Queries;
 using Playground.Application.Interfaces;
 using Playground.Domain.Interfaces;
@@ -34,6 +35,13 @@ public static class TestEndpoints
             await service.CreateOrderAsync(request);
 
             return Results.Ok();
+        });
+
+        app.MapGet("/api/currency", async (
+            IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetConvertedCurrencyQuery());
+            return result.Success ? Results.Ok(result.Data) : Results.BadRequest(result.Message);
         });
 
     }
